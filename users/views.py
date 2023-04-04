@@ -22,6 +22,7 @@ from users.utils import Util
 
 class SignUpView(APIView):
     def post(self, request, format=None):
+        print(request.data)
         serializer = serializers.SignUpCustomSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -52,11 +53,11 @@ class SignUpView(APIView):
                 status=status.HTTP_205_RESET_CONTENT,
             )
 
-        else:
-            Response(
-                {"stauts": "error", "data": serializer.errors},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        # else:
+        #     Response(
+        #         {"stauts": "error", "data": serializer.errors},
+        #         status=status.HTTP_400_BAD_REQUEST,
+        # )
         return Response(
             {"stauts": "error", "data": serializer.errors},
             status=status.HTTP_400_BAD_REQUEST,

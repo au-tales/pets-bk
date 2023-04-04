@@ -46,10 +46,6 @@ class LoginCustomSerializer(serializers.Serializer):
 
 class SignUpCustomSerializer(serializers.ModelSerializer):
 
-    password2 = serializers.CharField(
-        style={"input_type": "password"}, write_only=True, required=True
-    )
-
     profile = UserProfileSerializer(many=False, required=False, allow_null=True)
 
     class Meta:
@@ -57,44 +53,34 @@ class SignUpCustomSerializer(serializers.ModelSerializer):
         # fields = "__all__"
         fields = [
             "email",
-            "first_name",
-            "last_name",
             "profile",
             "password",
-            "password2",
-            "companies",
         ]
 
     def save(self):
         password = self.validated_data["password"]
-        password2 = self.validated_data["password2"]
-        compnay_data = self.validated_data["companies"]
         profile_data = self.validated_data["profile"]
+
+        print("password ----------->", password, profile_data)
 
         # validating phonenumber
 
         # check for confirm password match
-        if password != password2:
-            raise serializers.ValidationError({"message": "Passwords doesn t match."})
-        else:
-            hash_password = make_password(self.validated_data["password"])
-            register = models.User(
-                first_name=self.validated_data["first_name"],
-                last_name=self.validated_data["last_name"],
-                email=self.validated_data["email"],
-                password=hash_password,
-            )
-            register.save()
+        hash_password = make_password(self.validated_data["password"])
+        register = models.User(
+            email=self.validated_data["email"], password=hash_password,
+        )
+        register.save()
 
-            company_obj = models.Company(user=register, **compnay_data).save()
-            profile_obj = models.UserProfile(user=register, **profile_data).save()
+        profile_obj = models.UserProfile(user=register, **profile_data).save()
         return register
 
-    # def validate_profile(self, profile):
-    #     if print(is_valid_number(parse(profile['phone']))):
-    #             return profile
-    #     else:
-    #         raise serializers.ValidationError({"phone": ["Phone number is not valid"]})
+    def validate_profile(self, profile):
+        if print(is_valid_number(parse(profile["phone"]))):
+            return profile
+        else:
+            raise serializers.ValidationError({"phone": ["Phone number is not valid"]})
+
     def validate_profile(self, profile):
         try:
             if not is_valid_number(parse(profile["phone"])):
@@ -151,6 +137,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
+
         refresh = self.get_token(self.user)
 
         data["refresh"] = str(refresh)
@@ -158,7 +145,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data["first_name"] = self.user.first_name
         data["last_name"] = self.user.last_name
         data["email"] = self.user.email
-        data["company"] = self.user.company_users.all().values("id", "name")[0]
         data["phone"] = self.user.userprofiles.phone
         return data
 

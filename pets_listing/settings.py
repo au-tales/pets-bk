@@ -54,6 +54,14 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.BasicAuthentication",
         "rest_framework.authentication.SessionAuthentication",
     ],
+    "EXCEPTION_HANDLER": "exceptions_hog.exception_handler",
+}
+
+EXCEPTIONS_HOG = {
+    "EXCEPTION_REPORTING": "exceptions_hog.handler.exception_reporter",
+    "ENABLE_IN_DEBUG": False,
+    "NESTED_KEY_SEPARATOR": "__",
+    "SUPPORT_MULTIPLE_EXCEPTIONS": True,
 }
 
 MIDDLEWARE = [

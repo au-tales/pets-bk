@@ -62,7 +62,7 @@ class UserManager(BaseUserManager):
 
 class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
-    username = models.CharField(max_length=150, unique=False)
+    username = models.CharField(max_length=150, unique=True)
     is_active = models.BooleanField(_("active"), default=False)
 
     objects = UserManager()
@@ -86,14 +86,7 @@ class UserProfile(models.Model):
         User, on_delete=models.CASCADE, null=True, related_name="userprofiles"
     )
     # birth_date = models.DateField(null=True, blank=True)
-    full_name = models.CharField(max_length=150, blank=True, null=True)
-    username = models.CharField(_("username"), max_length=150, blank=True, null=True)
     phone = models.CharField(max_length=150, unique=False)
-    email = models.EmailField(_("email"), blank=True, null=True)
-    zip = models.CharField(blank=True, null=True, max_length=10)
-    city = models.CharField(blank=True, null=True, max_length=50)
-    state = models.CharField(blank=True, null=True, max_length=50)
-    country = models.CharField(blank=True, null=True, max_length=100)
     create_date = models.DateTimeField(auto_now_add=True)
     update_date = models.DateTimeField(null=True, blank=True)
 
