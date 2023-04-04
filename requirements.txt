@@ -2,5 +2,5 @@ Django
 djangorestframework
 markdown
 django-filter
-mysqlclient
+PyMySQL
 python-decouple
