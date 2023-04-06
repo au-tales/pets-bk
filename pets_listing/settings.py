@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # plugins add here
     "rest_framework",
+    "drf_yasg",
     # local app add here
     "users",
 ]
