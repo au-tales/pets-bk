@@ -53,16 +53,13 @@ class SignUpCustomSerializer(serializers.ModelSerializer):
         # fields = "__all__"
         fields = [
             "email",
-            "profile",
             "password",
+            "profile",
         ]
 
     def save(self):
         password = self.validated_data["password"]
         profile_data = self.validated_data["profile"]
-
-        print("password ----------->", password, profile_data)
-
         # validating phonenumber
 
         # check for confirm password match
@@ -144,6 +141,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data["access"] = str(refresh.access_token)
         data["first_name"] = self.user.first_name
         data["last_name"] = self.user.last_name
+        data["user_id"] = self.user.id
         data["email"] = self.user.email
         data["phone"] = self.user.userprofiles.phone
         return data

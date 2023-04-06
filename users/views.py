@@ -21,6 +21,7 @@ from users.utils import Util
 
 
 class SignUpView(APIView):
+    @swagger_auto_schema(request_body=serializers.SignUpCustomSerializer)
     def post(self, request, format=None):
         print(request.data)
         serializer = serializers.SignUpCustomSerializer(data=request.data)

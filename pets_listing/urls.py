@@ -15,6 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_yasg import openapi
+from drf_yasg.views import get_schema_view as swagger_get_schema_view
+
+
+schema_view = swagger_get_schema_view(
+    openapi.Info(
+        title="Pet Listing API", default_version="0.0.0", description="Pet Listing API "
+    ),
+    public=True,
+)
 
 
 admin.site.site_header = "Pet Listing APP"
@@ -22,6 +32,9 @@ admin.site.site_title = "Pet Listing APP"
 admin.site.index_title = "Welcome to Pet Listing APP"
 
 urlpatterns = [
+    path(
+        "docs/", schema_view.with_ui("swagger", cache_timeout=0), name="swagger-schema"
+    ),
     path("admin/", admin.site.urls),
     path("api/auth/", include("users.urls")),
 ]
